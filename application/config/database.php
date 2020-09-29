@@ -3,7 +3,7 @@
  * @Description: 数据库配置
  * @Author: xiachaoqing
  * @Date: 2020-09-24 10:47:41
- * @LastEditTime: 2020-09-29 10:49:07
+ * @LastEditTime: 2020-09-29 10:57:02
  * @LastEditors: xiachaoqing
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
@@ -84,7 +84,7 @@ $db['default'] = array(
 	'dsn'	=> 'mysql:dbname=blog;host=127.0.0.1',
 	'hostname' => '127.0.0.1',
 	'username' => 'root',
-	'password' => 'z1liGNleVd?q',
+	'password' => '07090218',
 	'database' => 'blog',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
