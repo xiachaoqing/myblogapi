@@ -3,7 +3,7 @@
  * @Description: 7牛配置
  * @Author: xiachaoqing
  * @Date: 2020-09-24 10:47:41
- * @LastEditTime: 2020-09-28 20:52:06
+ * @LastEditTime: 2020-10-24 19:45:33
  * @LastEditors: xiachaoqing
  */
 defined('BASEPATH') or exit('No direct script access allowed');
@@ -27,7 +27,7 @@ class Qiniu_model extends Base_Model
         $deadline = time() + 3600;
         $args['scope'] = $bucket;
         $args['deadline'] = $deadline;
-        $args['returnBody'] = '{"imgUrl": "http://qh5mjpidq.hb-bkt.clouddn.com/$(key)"}'; // 这里要改成自己的域名或其他，上传成功后是返回这个json数据，url就是图片的地址
+        $args['returnBody'] = '{"imgUrl": "http://cdn.xiachaoqing.com/$(key)"}'; // 这里要改成自己的域名或其他，上传成功后是返回这个json数据，url就是图片的地址
         $b = json_encode($args);
         $result = array(
             'token'=> $this->signWithData($b)

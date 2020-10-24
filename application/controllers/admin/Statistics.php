@@ -1,4 +1,11 @@
 <?php
+/*
+ * @Description: 
+ * @Author: xiachaoqing
+ * @Date: 2020-09-24 10:47:41
+ * @LastEditTime: 2020-10-23 14:16:46
+ * @LastEditors: xiachaoqing
+ */
 defined('BASEPATH') or exit('No direct script access allowed');
 
 require APPPATH. 'core/Base_Controller.php';
