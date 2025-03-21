@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后端开发者工具集</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 900px;
+            margin-top: 30px;
+        }
+        .tool-card {
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+        }
+        .card-header {
+            border-radius: 10px 10px 0 0 !important;
+            background-color: #6c757d;
+            color: white;
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #5c6bc0;
+            border-color: #5c6bc0;
+        }
+        .btn-primary:hover {
+            background-color: #3f51b5;
+            border-color: #3f51b5;
+        }
+        .btn-secondary {
+            background-color: #78909c;
+            border-color: #78909c;
+        }
+        .btn-secondary:hover {
+            background-color: #546e7a;
+            border-color: #546e7a;
+        }
+        .form-control:focus {
+            border-color: #5c6bc0;
+            box-shadow: 0 0 0 0.25rem rgba(92, 107, 192, 0.25);
+        }
+        .tab-content {
+            padding-top: 20px;
+        }
+        #footer {
+            margin-top: 30px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #6c757d;
+        }
+        .nav-tabs .nav-link {
+            color: #495057;
+        }
+        .nav-tabs .nav-link.active {
+            color: #5c6bc0;
+            font-weight: bold;
+        }
+        .copy-success {
+            background-color: #d4edda !important;
+            transition: background-color 0.5s;
+        }
+        .tab-scrollable {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .tool-icon {
+            margin-right: 5px;
+        }
+        .tools-nav {
+            flex-wrap: wrap;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .tools-nav .nav-item {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-4">后端开发者工具集</h1>
+        
+        <ul class="nav nav-tabs mb-3 tools-nav" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="timestamp-tab" data-bs-toggle="tab" data-bs-target="#timestamp" type="button" role="tab">
+                    <i class="bi bi-clock tool-icon"></i>时间戳
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="json-tab" data-bs-toggle="tab" data-bs-target="#json" type="button" role="tab">
+                    <i class="bi bi-braces tool-icon"></i>JSON
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="number-tab" data-bs-toggle="tab" data-bs-target="#number" type="button" role="tab">
+                    <i class="bi bi-123 tool-icon"></i>数字
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="encode-tab" data-bs-toggle="tab" data-bs-target="#encode" type="button" role="tab">
+                    <i class="bi bi-code-slash tool-icon"></i>编解码
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="hash-tab" data-bs-toggle="tab" data-bs-target="#hash" type="button" role="tab">
+                    <i class="bi bi-hash tool-icon"></i>哈希/加密
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="uuid-tab" data-bs-toggle="tab" data-bs-target="#uuid" type="button" role="tab">
+                    <i class="bi bi-fingerprint tool-icon"></i>UUID
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="jwt-tab" data-bs-toggle="tab" data-bs-target="#jwt" type="button" role="tab">
+                    <i class="bi bi-key tool-icon"></i>JWT
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="regex-tab" data-bs-toggle="tab" data-bs-target="#regex" type="button" role="tab">
+                    <i class="bi bi-search tool-icon"></i>正则
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="sql-tab" data-bs-toggle="tab" data-bs-target="#sql" type="button" role="tab">
+                    <i class="bi bi-database tool-icon"></i>SQL
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="cron-tab" data-bs-toggle="tab" data-bs-target="#cron" type="button" role="tab">
+                    <i class="bi bi-calendar3 tool-icon"></i>CRON
+                </button>
+            </li>
+        </ul>
+        
+        <div class="tab-content tab-scrollable" id="myTabContent">
+            <!-- 时间戳转换 -->
+            <div class="tab-pane fade show active" id="timestamp" role="tabpanel">
+                <div class="card tool-card">
+                    <div class="card-header">时间戳转换工具</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">当前时间戳</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="currentTimestamp" readonly>
+                                <button class="btn btn-secondary" onclick="copyToClipboard('currentTimestamp')">复制</button>
+                                <button class="btn btn-primary" onclick="updateCurrentTimestamp()">刷新</button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">时间戳转日期时间</label>
+                            <div class="input-group mb-2">
+                                <input type="number" class="form-control" id="timestampInput" placeholder="输入时间戳">
+                                <button class="btn btn-primary" onclick="convertTimestampToDate()">转换</button>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="timestampUnit" id="seconds" value="seconds" checked>
+                                <label class="form-check-label" for="seconds">秒 (10位)</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="timestampUnit" id="milliseconds" value="milliseconds">
+                                <label class="form-check-label" for="milliseconds">毫秒 (13位)</label>
+                            </div>
+                            <div class="mt-2">
+                                <input type="text" class="form-control" id="dateResult" readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">日期时间转时间戳</label>
+                            <div class="input-group mb-2">
+                                <input type="datetime-local" class="form-control" id="datetimeInput">
+                                <button class="btn btn-primary" onclick="convertDateToTimestamp()">转换</button>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">秒级</span>
+                                        <input type="text" class="form-control" id="secondsResult" readonly>
+                                        <button class="btn btn-secondary" onclick="copyToClipboard('secondsResult')">复制</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="input-group">
+                                        <span class="input-group-text">毫秒级</span>
+                                        <input type="text" class="form-control" id="millisecondsResult" readonly>
+                                        <button class="btn btn-secondary" onclick="copyToClipboard('millisecondsResult')">复制</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- JSON工具 -->
+            <div class="tab-pane fade" id="json" role="tabpanel">
+                <div class="card tool-card">
+                    <div class="card-header">JSON格式化工具</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <textarea class="form-control" id="jsonInput" rows="8" placeholder="输入JSON字符串"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <div class="row">
+                                <div class="col">
+                                    <button class="btn btn-primary w-100" onclick="formatJSON()">格式化</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-secondary w-100" onclick="minifyJSON()">压缩</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-danger w-100" onclick="clearJSON()">清空</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-success w-100" onclick="copyToClipboard('jsonInput')">复制</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="row">
+                                <div class="col">
+                                    <button class="btn btn-info w-100" onclick="jsonToYaml()">转YAML</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-info w-100" onclick="validateJSON()">校验</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-info w-100" onclick="jsonToCsv()">转CSV</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-warning w-100" onclick="jsonToXml()">转XML</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 数字处理 -->
+            <div class="tab-pane fade" id="number" role="tabpanel">
+                <div class="card tool-card">
+                    <div class="card-header">数字处理工具</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">去除小数点</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="floatInput" placeholder="输入带小数点的数字">
+                                <button class="btn btn-primary" onclick="removeDecimal()">处理</button>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">结果</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="intResult" readonly>
+                                <button class="btn btn-secondary" onclick="copyToClipboard('intResult')">复制</button>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="mb-3">
+                            <label class="form-label">数字格式化</label>
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="numberInput" placeholder="输入数字">
+                                <select class="form-select" id="formatType" style="max-width: 200px;">
+                                    <option value="thousands">千位分隔</option>
+                                    <option value="decimal">保留小数位</option>
+                                    <option value="percentage">百分比</option>
+                                </select>
+                            </div>
+                            <div id="decimalOptions" class="mb-2" style="display: none;">
+                                <label class="form-label">小数位数</label>
+                                <input type="number" class="form-control" id="decimalPlaces" min="0" max="10" value="2">
+                            </div>
+                            <div class="d-grid">
+                                <button class="btn btn-primary" onclick="formatNumber()">格式化</button>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">格式化结果</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="formattedResult" readonly>
+                                <button class="btn btn-secondary" onclick="copyToClipboard('formattedResult')">复制</button>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="mb-3">
+                            <label class="form-label">进制转换</label>
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="baseInput" placeholder="输入数字">
+                                <select class="form-select" id="fromBase" style="max-width: 150px;">
+                                    <option value="10">十进制</option>
+                                    <option value="2">二进制</option>
+                                    <option value="8">八进制</option>
+                                    <option value="16">十六进制</option>
+                                </select>
+                                <span class="input-group-text">转为</span>
+                                <select class="form-select" id="toBase" style="max-width: 150px;">
+                                    <option value="2">二进制</option>
+                                    <option value="8">八进制</option>
+                                    <option value="10">十进制</option>
+                                    <option value="16">十六进制</option>
+                                </select>
+                            </div>
+                            <div class="d-grid">
+                                <button class="btn btn-primary" onclick="convertBase()">转换</button>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">进制转换结果</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="baseResult" readonly>
+                                <button class="btn btn-secondary" onclick="copyToClipboard('baseResult')">复制</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 编解码工具 -->
+            <div class="tab-pane fade" id="encode" role="tabpanel">
+                <div class="card tool-card">
+                    <div class="card-header">编解码工具</div>
+                    <div class="card-body">
+                        <!-- URL编解码 -->
+                        <div class="mb-4">
+                            <h5>URL编解码</h5>
+                            <div class="mb-3">
+                                <textarea class="form-control" id="urlInput" rows="3" placeholder="输入需要编码或解码的文本"></textarea>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <button class="btn btn-primary w-100" onclick="encodeUrl()">URL编码</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-secondary w-100" onclick="decodeUrl()">URL解码</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-success w-100" onclick="copyToClipboard('urlInput')">复制</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-danger w-100" onclick="document.getElementById('urlInput').value = ''">清空</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Base64编解码 -->
+                        <div class="mb-4">
+                            <h5>Base64编解码</h5>
+                            <div class="mb-3">
+                                <textarea class="form-control" id="base64Input" rows="3" placeholder="输入需要编码或解码的文本"></textarea>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <button class="btn btn-primary w-100" onclick="encodeBase64()">Base64编码</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-secondary w-100" onclick="decodeBase64()">Base64解码</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-success w-100" onclick="copyToClipboard('base64Input')">复制</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-danger w-100" onclick="document.getElementById('base64Input').value = ''">清空</button>
+                                </div>
+                            </div>
+                            <div id="base64ImagePreview" class="mt-2" style="display: none;">
+                                <label class="form-label">图片预览 (如果是图片Base64):</label>
+                                <div class="text-center">
+                                    <img id="base64Image" class="img-fluid" style="max-height: 200px;" alt="Base64图片预览">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- HTML实体编解码 -->
+                        <div class="mb-4">
+                            <h5>HTML实体编解码</h5>
+                            <div class="mb-3">
+                                <textarea class="form-control" id="htmlInput" rows="3" placeholder="输入需要编码或解码的HTML文本"></textarea>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <button class="btn btn-primary w-100" onclick="encodeHtml()">HTML实体编码</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-secondary w-100" onclick="decodeHtml()">HTML实体解码</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-success w-100" onclick="copyToClipboard('htmlInput')">复制</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-danger w-100" onclick="document.getElementById('htmlInput').value = ''">清空</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 哈希/加密工具 -->
+            <div class="tab-pane fade" id="hash" role="tabpanel">
+                <div class="card tool-card">
+                    <div class="card-header">哈希/加密工具</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">输入文本</label>
+                            <textarea class="form-control" id="hashInput" rows="3" placeholder="输入需要哈希的文本"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">选择哈希算法</label>
+                            <select class="form-select" id="hashAlgorithm">
+                                <option value="md5">MD5</option>
+                                <option value="sha1">SHA-1</option>
+                                <option value="sha256">SHA-256</option>
+                                <option value="sha512">SHA-512</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-primary" onclick="generateHash()">生成哈希</button>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">哈希结果</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="hashResult" readonly>
+                                <button class="btn btn-secondary" onclick="copyToClipboard('hashResult')">复制</button>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <h5>简单加密/解密</h5>
+                        <div class="mb-3">
+                            <label class="form-label">输入文本</label>
+                            <textarea class="form-control" id="cryptInput" rows="3" placeholder="输入需要加密/解密的文本"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">密码</label>
+                            <input type="password" class="form-control" id="cryptKey" placeholder="输入密码">
+                        </div>
+                        <div class="mb-3">
+                            <div class="row">
+                                <div class="col">
+                                    <button class="btn btn-primary w-100" onclick="encryptText()">加密</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-secondary w-100" onclick="decryptText()">解密</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">结果</label>
+                            <textarea class="form-control" id="cryptResult" rows="3" readonly></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-success" onclick="copyToClipboard('cryptResult')">复制结果</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- UUID生成器 -->
+            <div class="tab-pane fade" id="uuid" role="tabpanel">
+                <div class="card tool-card">
+                    <div class="card-header">UUID生成器</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">UUID版本</label>
+                            <select class="form-select" id="uuidVersion">
+                                <option value="4">Version 4 (随机)</option>
+                                <option value="1">Version 1 (基于时间)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">格式</label>
+                            <select class="form-select" id="uuidFormat">
+                                <option value="standard">标准格式 (带连字符)</option>
+                                <option value="simple">简单格式 (无连字符)</option>
+                                <option value="braces">带括号</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">数量</label>
+                            <input type="number" class="form-control" id="uuidCount" min="1" max="100" value="1">
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-primary" onclick="generateUuid()">生成UUID</button>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">生成的UUID</label>
+                            <textarea class="form-control" id="uuidResult" rows="5" readonly></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-success" onclick="copyToClipboard('uuidResult')">复制所有UUID</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- JWT解析器 -->
+            <div class="tab-pane fade" id="jwt" role="tabpanel">
+                <div class="card tool-card">
+                    <div class="card-header">JWT令牌解析器</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">JWT令牌</label>
+                            <textarea class="form-control" id="jwtInput" rows="3" placeholder="输入JWT令牌"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-primary" onclick="parseJwt()">解析</button>
+                            <button class="btn btn-danger" onclick="document.getElementById('jwtInput').value = ''">清空</button>
+                        </div>
+                        <div id="jwtResult" class="mt-4">
+                            <div class="mb-3">
+                                <label class="form-label">头部 (Header)</label>
+                                <pre id="jwtHeader"></pre>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">负载 (Payload)</label>
+                                <pre id="jwtPayload"></pre>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">签名 (Signature)</label>
+                                <pre id="jwtSignature"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 正则表达式测试器 -->
+            <div class="tab-pane fade" id="regex" role="tabpanel">
+                <div class="card tool-card">
+                    <div class="card-header">正则表达式测试器</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">正则表达式</label>
+                            <div class="input-group">
+                                <span class="input-group-text">/</span>
+                                <input type="text" class="form-control" id="regexPattern" placeholder="输入正则表达式">
+                                <span class="input-group-text">/</span>
+                                <input type="text" class="form-control" id="regexFlags" placeholder="flags" style="max-width: 80px;">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">测试文本</label>
+                            <textarea class="form-control" id="regexText" rows="5" placeholder="输入需要测试的文本"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-primary" onclick="testRegex()">测试匹配</button>
+                            <button class="btn btn-secondary" onclick="replaceRegex()">替换</button>
+                            <input type="text" class="form-control d-inline-block ml-2" id="regexReplace" placeholder="替换文本" style="width: 200px; margin-left: 10px;">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">匹配结果</label>
+                            <pre id="regexResult"></pre>
+                        </div>
+                        <div id="regexReplaceResult" class="mb-3" style="display: none;">
+                            <label class="form-label">替换结果</label>
+                            <textarea class="form-control" id="regexReplaceText" rows="5" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SQL格式化 -->
+            <div class="tab-pane fade" id="sql" role="tabpanel">
+                <div class="card tool-card">
+                    <div class="card-header">SQL格式化工具</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">输入SQL</label>
+                            <textarea class="form-control" id="sqlInput" rows="8" placeholder="输入需要格式化的SQL"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">SQL方言</label>
+                            <select class="form-select" id="sqlDialect">
+                                <option value="sql">通用SQL</option>
+                                <option value="mysql">MySQL</option>
+                                <option value="postgresql">PostgreSQL</option>
+                                <option value="oracle">Oracle</option>
+                                <option value="sqlserver">SQL Server</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-primary" onclick="formatSql()">格式化</button>
+                            <button class="btn btn-danger" onclick="document.getElementById('sqlInput').value = ''">清空</button>
+                            <button class="btn btn-success" onclick="copyToClipboard('sqlInput')">复制</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CRON表达式解析 -->
+            <div class="tab-pane fade" id="cron" role="tabpanel">
+                <div class="card tool-card">
+                    <div class="card-header">CRON表达式解析器</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">CRON表达式</label>
+                            <input type="text" class="form-control" id="cronExpression" placeholder="输入CRON表达式，例如: 0 0 12 * * ?">
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-primary" onclick="parseCron()">解析</button>
+                        </div>
+                        <div id="cronResult" class="mb-3">
+                            <label class="form-label">人类可读解释</label>
+                            <div class="alert alert-info" id="cronDescription"></div>
+                        </div>
+                        <div id="cronNextExec" class="mb-3">
+                            <label class="form-label">未来执行时间</label>
+                            <ul class="list-group" id="cronNextDates"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="footer">
+            <p>© <span id="currentYear"></span> 后端开发者工具集 | 简单高效的在线工具</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCurrentTimestamp();
+            setCurrentDatetime();
+            
+            // 设置当前年份
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // 监听格式化类型变化
+            document.getElementById('formatType').addEventListener('change', function() {
+                if (this.value === 'decimal') {
+                    document.getElementById('decimalOptions').style.display = 'block';
+                } else {
+                    document.getElementById('decimalOptions').style.display = 'none';
+                }
+            });
+            
+            // 监听Base64输入变化，检查是否是图片
+            document.getElementById('base64Input').addEventListener('input', function() {
+                checkBase64Image(this.value);
+            });
+        });
+        
+        // ===== 时间戳转换功能 =====
+        
+        // 更新当前时间戳
+        function updateCurrentTimestamp() {
+            const now = new Date();
+            document.getElementById('currentTimestamp').value = Math.floor(now.getTime() / 1000);
+        }
+        
+        // 设置当前日期时间到输入框
+        function setCurrentDatetime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            
+            document.getElementById('datetimeInput').value = `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
+        
+        // 时间戳转日期时间
+        function convertTimestampToDate() {
+            const timestamp = document.getElementById('timestampInput').value;
+            if (!timestamp) {
+                alert('请输入时间戳');
+                return;
+            }
+            
+            const unit = document.querySelector('input[name="timestampUnit"]:checked').value;
+            let date;
+            
+            if (unit === 'seconds') {
+                date = new Date(parseInt(timestamp) * 1000);
+            } else {
+                date = new Date(parseInt(timestamp));
+            }
+            
+            if (isNaN(date.getTime())) {
+                alert('无效的时间戳');
+                return;
+            }
+            
+            const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
+            document.getElementById('dateResult').value = formattedDate;
+        }
+        
+        // 日期时间转时间戳
+        function convertDateToTimestamp() {
+            const datetimeInput = document.getElementById('datetimeInput').value;
+            if (!datetimeInput) {
+                alert('请输入日期时间');
+                return;
+            }
+            
+            const date = new Date(datetimeInput);
+            if (isNaN(date.getTime())) {
+                alert('无效的日期时间');
+                return;
+            }
+            
+            document.getElementById('secondsResult').value = Math.floor(date.getTime() / 1000);
+            document.getElementById('millisecondsResult').value = date.getTime();
+        }
+        
+        // ===== JSON功能 =====
+        
+        // 格式化JSON
+        function formatJSON() {
+            try {
+                const jsonInput = document.getElementById('jsonInput');
+                const json = JSON.parse(jsonInput.value);
+                jsonInput.value = JSON.stringify(json, null, 2);
+            } catch (e) {
+                alert('无效的JSON格式: ' + e.message);
+            }
+        }
+        
+        // 压缩JSON
+        function minifyJSON() {
+            try {
+                const jsonInput = document.getElementById('jsonInput');
+                const json = JSON.parse(jsonInput.value);
+                jsonInput.value = JSON.stringify(json);
+            } catch (e) {
+                alert('无效的JSON格式: ' + e.message);
+            }
+        }
+        
+        // 清空JSON
+        function clearJSON() {
+            document.getElementById('jsonInput').value = '';
+        }
+        
+        // JSON转YAML
+        function jsonToYaml() {
+            try {
+                const jsonInput = document.getElementById('jsonInput');
+                const json = JSON.parse(jsonInput.value);
+                jsonInput.value = jsyaml.dump(json);
+            } catch (e) {
+                alert('无效的JSON格式或转换失败: ' + e.message);
+            }
+        }
+        
+        // 验证JSON
+        function validateJSON() {
+            try {
+                const jsonInput = document.getElementById('jsonInput').value;
+                JSON.parse(jsonInput);
+                alert('JSON格式有效！');
+            } catch (e) {
+                alert('JSON格式无效: ' + e.message);
+            }
+        }
+        
+        // JSON转CSV
+        function jsonToCsv() {
+            try {
+                const jsonInput = document.getElementById('jsonInput');
+                const data = JSON.parse(jsonInput.value);
+                
+                // 确保数据是数组
+                if (!Array.isArray(data)) {
+                    alert('只能转换JSON数组');
+                    return;
+                }
+                
+                // 获取所有可能的列
+                const columns = new Set();
+                data.forEach(item => {
+                    Object.keys(item).forEach(key => columns.add(key));
+                });
+                
+                const columnsArray = Array.from(columns);
+                
+                // 创建CSV内容
+                let csv = columnsArray.join(',') + '\n';
+                
+                data.forEach(item => {
+                    const row = columnsArray.map(column => {
+                        const value = item[column] === undefined ? '' : item[column];
+                        // 如果值包含逗号、双引号或换行符，则用双引号包裹
+                        if (typeof value === 'string' && (value.includes(',') || value.includes('"') || value.includes('\n'))) {
+                            return '"' + value.replace(/"/g, '""') + '"';
+                        }
+                        return value;
+                    }).join(',');
+                    csv += row + '\n';
+                });
+                
+                jsonInput.value = csv;
+            } catch (e) {
+                alert('转换失败: ' + e.message);
+            }
+        }
+        
+        // JSON转XML
+        function jsonToXml() {
+            try {
+                const jsonInput = document.getElementById('jsonInput');
+                const data = JSON.parse(jsonInput.value);
+                
+                function jsonToXmlString(obj, nodeName = 'root') {
+                    let xml = '';
+                    
+                    if (Array.isArray(obj)) {
+                        xml += `<${nodeName}>\n`;
+                        obj.forEach((item, index) => {
+                            xml += jsonToXmlString(item, 'item');
+                        });
+                        xml += `</${nodeName}>\n`;
+                    } else if (typeof obj === 'object' && obj !== null) {
+                        xml += `<${nodeName}>\n`;
+                        for (const key in obj) {
+                            if (obj.hasOwnProperty(key)) {
+                                xml += jsonToXmlString(obj[key], key);
+                            }
+                        }
+                        xml += `</${nodeName}>\n`;
+                    } else {
+                        xml += `<${nodeName}>${obj}</${nodeName}>\n`;
+                    }
+                    
+                    return xml;
+                }
+                
+                jsonInput.value = jsonToXmlString(data);
+            } catch (e) {
+                alert('转换失败: ' + e.message);
+            }
+        }
+        
+        // ===== 数字处理功能 =====
+        
+        // 去除小数点
+        function removeDecimal() {
+            const floatInput = document.getElementById('floatInput').value;
+            if (!floatInput) {
+                alert('请输入数字');
+                return;
+            }
+            
+            const num = parseFloat(floatInput);
+            if (isNaN(num)) {
+                alert('无效的数字');
+                return;
+            }
+            
+            document.getElementById('intResult').value = num.toString().replace('.', '');
+        }
+        
+        // 格式化数字
+        function formatNumber() {
+            const numberInput = document.getElementById('numberInput').value;
+            if (!numberInput) {
+                alert('请输入数字');
+                return;
+            }
+            
+            const num = parseFloat(numberInput);
+            if (isNaN(num)) {
+                alert('无效的数字');
+                return;
+            }
+            
+            const formatType = document.getElementById('formatType').value;
+            let result = '';
+            
+            switch (formatType) {
+                case 'thousands':
+                    result = num.toLocaleString('zh-CN');
+                    break;
+                case 'decimal':
+                    const decimalPlaces = parseInt(document.getElementById('decimalPlaces').value);
+                    result = num.toFixed(decimalPlaces);
+                    break;
+                case 'percentage':
+                    result = (num * 100).toFixed(2) + '%';
+                    break;
+                default:
+                    result = num.toString();
+            }
+            
+            document.getElementById('formattedResult').value = result;
+        }
+        
+        // 进制转换
+        function convertBase() {
+            const baseInput = document.getElementById('baseInput').value;
+            if (!baseInput) {
+                alert('请输入数字');
+                return;
+            }
+            
+            const fromBase = parseInt(document.getElementById('fromBase').value);
+            const toBase = parseInt(document.getElementById('toBase').value);
+            
+            try {
+                // 先将输入转换为十进制
+                const decimalValue = parseInt(baseInput, fromBase);
+                if (isNaN(decimalValue)) {
+                    throw new Error('无效的数字或进制');
+                }
+                
+                // 然后转换为目标进制
+                const result = decimalValue.toString(toBase);
+                document.getElementById('baseResult').value = result;
+            } catch (e) {
+                alert('转换失败: ' + e.message);
+            }
+        }
+        
+        // ===== 编解码功能 =====
+        
+        // URL编码
+        function encodeUrl() {
+            const urlInput = document.getElementById('urlInput');
+            urlInput.value = encodeURIComponent(urlInput.value);
+        }
+        
+        // URL解码
+        function decodeUrl() {
+            const urlInput = document.getElementById('urlInput');
+            try {
+                urlInput.value = decodeURIComponent(urlInput.value);
+            } catch (e) {
+                alert('解码失败: ' + e.message);
+            }
+        }
+        
+        // Base64编码
+        function encodeBase64() {
+            const base64Input = document.getElementById('base64Input');
+            try {
+                const encoded = btoa(unescape(encodeURIComponent(base64Input.value)));
+                base64Input.value = encoded;
+                checkBase64Image(encoded);
+            } catch (e) {
+                alert('编码失败: ' + e.message);
+            }
+        }
+        
+        // Base64解码
+        function decodeBase64() {
+            const base64Input = document.getElementById('base64Input');
+            try {
+                base64Input.value = decodeURIComponent(escape(atob(base64Input.value)));
+                document.getElementById('base64ImagePreview').style.display = 'none';
+            } catch (e) {
+                alert('解码失败: ' + e.message);
+            }
+        }
+        
+        // 检查是否是Base64图片
+        function checkBase64Image(base64String) {
+            const imagePreview = document.getElementById('base64ImagePreview');
+            const image = document.getElementById('base64Image');
+            
+            // 检查是否是图片的Base64
+            if (base64String.match(/^data:image\/[a-z]+;base64,/i)) {
+                image.src = base64String;
+                imagePreview.style.display = 'block';
+            } else if (base64String.match(/^[A-Za-z0-9+/=]+$/)) {
+                // 尝试作为图片解析
+                try {
+                    image.src = 'data:image/png;base64,' + base64String;
+                    image.onload = function() {
+                        imagePreview.style.display = 'block';
+                    };
+                    image.onerror = function() {
+                        imagePreview.style.display = 'none';
+                    };
+                } catch (e) {
+                    imagePreview.style.display = 'none';
+                }
+            } else {
+                imagePreview.style.display = 'none';
+            }
+        }
+        
+        // HTML实体编码
+        function encodeHtml() {
+            const htmlInput = document.getElementById('htmlInput');
+            htmlInput.value = htmlInput.value
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+        
+        // HTML实体解码
+        function decodeHtml() {
+            const htmlInput = document.getElementById('htmlInput');
+            htmlInput.value = htmlInput.value
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&quot;/g, '"')
+                .replace(/&#39;/g, "'");
+        }
+        
+        // ===== 哈希/加密功能 =====
+        
+        // 生成哈希
+        function generateHash() {
+            const hashInput = document.getElementById('hashInput').value;
+            if (!hashInput) {
+                alert('请输入文本');
+                return;
+            }
+            
+            const algorithm = document.getElementById('hashAlgorithm').value;
+            let hashResult = '';
+            
+            switch (algorithm) {
+                case 'md5':
+                    hashResult = CryptoJS.MD5(hashInput).toString();
+                    break;
+                case 'sha1':
+                    hashResult = CryptoJS.SHA1(hashInput).toString();
+                    break;
+                case 'sha256':
+                    hashResult = CryptoJS.SHA256(hashInput).toString();
+                    break;
+                case 'sha512':
+                    hashResult = CryptoJS.SHA512(hashInput).toString();
+                    break;
+                default:
+                    hashResult = CryptoJS.MD5(hashInput).toString();
+            }
+            
+            document.getElementById('hashResult').value = hashResult;
+        }
+        
+        // 加密文本
+        function encryptText() {
+            const text = document.getElementById('cryptInput').value;
+            const key = document.getElementById('cryptKey').value;
+            
+            if (!text) {
+                alert('请输入文本');
+                return;
+            }
+            
+            if (!key) {
+                alert('请输入密码');
+                return;
+            }
+            
+            try {
+                const encrypted = CryptoJS.AES.encrypt(text, key).toString();
+                document.getElementById('cryptResult').value = encrypted;
+            } catch (e) {
+                alert('加密失败: ' + e.message);
+            }
+        }
+        
+        // 解密文本
+        function decryptText() {
+            const text = document.getElementById('cryptInput').value;
+            const key = document.getElementById('cryptKey').value;
+            
+            if (!text) {
+                alert('请输入加密文本');
+                return;
+            }
+            
+            if (!key) {
+                alert('请输入密码');
+                return;
+            }
+            
+            try {
+                const decrypted = CryptoJS.AES.decrypt(text, key).toString(CryptoJS.enc.Utf8);
+                if (!decrypted) {
+                    throw new Error('解密失败，可能是密码错误');
+                }
+                document.getElementById('cryptResult').value = decrypted;
+            } catch (e) {
+                alert('解密失败: ' + e.message);
+            }
+        }
+        
+        // ===== UUID生成器 =====
+        
+        // 生成UUID
+        function generateUuid() {
+            const version = document.getElementById('uuidVersion').value;
+            const format = document.getElementById('uuidFormat').value;
+            const count = parseInt(document.getElementById('uuidCount').value) || 1;
+            
+            let uuids = [];
+            
+            for (let i = 0; i < count; i++) {
+                let uuid = '';
+                
+                if (version === '4') {
+                    uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                        const r = Math.random() * 16 | 0;
+                        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                        return v.toString(16);
+                    });
+                } else if (version === '1') {
+                    // 简化版的v1 UUID，不是真正基于时间的
+                    const now = new Date();
+                    const timeStr = now.getTime().toString(16).padStart(16, '0');
+                    uuid = timeStr.substring(0, 8) + '-' + 
+                           timeStr.substring(8, 12) + '-1' + 
+                           timeStr.substring(13, 16) + '-' + 
+                           (Math.random() * 0xffff | 0).toString(16).padStart(4, '0') + '-' + 
+                           (Math.random() * 0xffffffffffff | 0).toString(16).padStart(12, '0');
+                }
+                
+                // 格式化UUID
+                switch (format) {
+                    case 'simple':
+                        uuid = uuid.replace(/-/g, '');
+                        break;
+                    case 'braces':
+                        uuid = '{' + uuid + '}';
+                        break;
+                }
+                
+                uuids.push(uuid);
+            }
+            
+            document.getElementById('uuidResult').value = uuids.join('\n');
+        }
+        
+        // ===== JWT解析器 =====
+        
+        // 解析JWT
+        function parseJwt() {
+            const jwtInput = document.getElementById('jwtInput').value.trim();
+            if (!jwtInput) {
+                alert('请输入JWT令牌');
+                return;
+            }
+            
+            try {
+                const parts = jwtInput.split('.');
+                if (parts.length !== 3) {
+                    throw new Error('无效的JWT格式，应该包含三部分');
+                }
+                
+                const header = JSON.parse(atob(parts[0]));
+                const payload = JSON.parse(atob(parts[1]));
+                
+                document.getElementById('jwtHeader').textContent = JSON.stringify(header, null, 2);
+                document.getElementById('jwtPayload').textContent = JSON.stringify(payload, null, 2);
+                document.getElementById('jwtSignature').textContent = parts[2];
+            } catch (e) {
+                alert('JWT解析失败: ' + e.message);
+            }
+        }
+        
+        // ===== 正则表达式测试器 =====
+        
+        // 测试正则表达式
+        function testRegex() {
+            const pattern = document.getElementById('regexPattern').value;
+            const flags = document.getElementById('regexFlags').value;
+            const text = document.getElementById('regexText').value;
+            
+            if (!pattern) {
+                alert('请输入正则表达式');
+                return;
+            }
+            
+            try {
+                const regex = new RegExp(pattern, flags);
+                const resultElement = document.getElementById('regexResult');
+                
+                let matches = [];
+                let match;
+                let result = '';
+                
+                if (flags.includes('g')) {
+                    // 全局匹配
+                    while ((match = regex.exec(text)) !== null) {
+                        matches.push(match);
+                    }
+                    
+                    if (matches.length > 0) {
+                        result = `找到 ${matches.length} 个匹配:\n\n`;
+                        matches.forEach((match, index) => {
+                            result += `匹配 #${index + 1} [位置: ${match.index}]:\n`;
+                            result += `整体匹配: ${match[0]}\n`;
+                            
+                            for (let i = 1; i < match.length; i++) {
+                                result += `  分组 ${i}: ${match[i]}\n`;
+                            }
+                            
+                            result += '\n';
+                        });
+                    } else {
+                        result = '没有找到匹配';
+                    }
+                } else {
+                    // 非全局匹配
+                    match = regex.exec(text);
+                    if (match) {
+                        result = `找到匹配 [位置: ${match.index}]:\n`;
+                        result += `整体匹配: ${match[0]}\n`;
+                        
+                        for (let i = 1; i < match.length; i++) {
+                            result += `  分组 ${i}: ${match[i]}\n`;
+                        }
+                    } else {
+                        result = '没有找到匹配';
+                    }
+                }
+                
+                resultElement.textContent = result;
+                document.getElementById('regexReplaceResult').style.display = 'none';
+            } catch (e) {
+                alert('正则表达式错误: ' + e.message);
+            }
+        }
+        
+        // 正则表达式替换
+        function replaceRegex() {
+            const pattern = document.getElementById('regexPattern').value;
+            const flags = document.getElementById('regexFlags').value;
+            const text = document.getElementById('regexText').value;
+            const replaceText = document.getElementById('regexReplace').value;
+            
+            if (!pattern) {
+                alert('请输入正则表达式');
+                return;
+            }
+            
+            try {
+                const regex = new RegExp(pattern, flags);
+                const result = text.replace(regex, replaceText);
+                
+                document.getElementById('regexReplaceText').value = result;
+                document.getElementById('regexReplaceResult').style.display = 'block';
+            } catch (e) {
+                alert('正则表达式错误: ' + e.message);
+            }
+        }
+        
+        // ===== SQL格式化 =====
+        
+        // 格式化SQL (简单实现)
+        function formatSql() {
+            const sqlInput = document.getElementById('sqlInput');
+            const sql = sqlInput.value;
+            
+            if (!sql) {
+                alert('请输入SQL');
+                return;
+            }
+            
+            try {
+                // 简单的SQL格式化实现
+                let formattedSql = sql
+                    // 在关键词后添加换行
+                    .replace(/\b(SELECT|FROM|WHERE|GROUP BY|HAVING|ORDER BY|LIMIT|JOIN|LEFT JOIN|RIGHT JOIN|INNER JOIN|OUTER JOIN|ON|AND|OR|INSERT INTO|VALUES|UPDATE|SET|DELETE FROM|CREATE TABLE|ALTER TABLE|DROP TABLE|CREATE DATABASE|USE)\b/gi, '\n$1')
+                    // 处理括号
+                    .replace(/\(/g, '\n(\n')
+                    .replace(/\)/g, '\n)\n')
+                    // 处理逗号
+                    .replace(/,/g, ',\n')
+                    // 处理分号
+                    .replace(/;/g, ';\n')
+                    // 移除多余的空行
+                    .replace(/\n\s*\n/g, '\n')
+                    // 缩进
+                    .split('\n').map(line => '    ' + line).join('\n')
+                    .trim();
+                
+                sqlInput.value = formattedSql;
+            } catch (e) {
+                alert('格式化失败: ' + e.message);
+            }
+        }
+        
+        // ===== CRON表达式解析 =====
+        
+        // 解析CRON表达式
+        function parseCron() {
+            const cronExpression = document.getElementById('cronExpression').value;
+            if (!cronExpression) {
+                alert('请输入CRON表达式');
+                return;
+            }
+            
+            try {
+                // 简单的CRON解析
+                const parts = cronExpression.trim().split(/\s+/);
+                if (parts.length < 5 || parts.length > 7) {
+                    throw new Error('CRON表达式应包含5-7个部分');
+                }
+                
+                const second = parts.length >= 6 ? parts[0] : '0';
+                const minute = parts.length >= 6 ? parts[1] : parts[0];
+                const hour = parts.length >= 6 ? parts[2] : parts[1];
+                const dayOfMonth = parts.length >= 6 ? parts[3] : parts[2];
+                const month = parts.length >= 6 ? parts[4] : parts[3];
+                const dayOfWeek = parts.length >= 6 ? parts[5] : parts[4];
+                const year = parts.length === 7 ? parts[6] : '*';
+                
+                let description = '这个CRON表达式表示：';
+                
+                if (second !== '0' && second !== '*') {
+                    description += `在第 ${describeCronPart(second)} 秒，`;
+                }
+                
+                if (minute !== '*') {
+                    description += `在第 ${describeCronPart(minute)} 分钟，`;
+                } else {
+                    description += '每分钟，';
+                }
+                
+                if (hour !== '*') {
+                    description += `在 ${describeCronPart(hour)} 点，`;
+                } else {
+                    description += '每小时，';
+                }
+                
+                if (dayOfMonth !== '*' && dayOfMonth !== '?') {
+                    description += `在每月的第 ${describeCronPart(dayOfMonth)} 天，`;
+                } else if (dayOfMonth === '*') {
+                    description += '每天，';
+                }
+                
+                if (month !== '*') {
+                    const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+                    description += `在 ${describeCronPartWithNames(month, monthNames)} 月，`;
+                }
+                
+                if (dayOfWeek !== '*' && dayOfWeek !== '?') {
+                    const dayNames = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+                    description += `在 ${describeCronPartWithNames(dayOfWeek, dayNames)}，`;
+                }
+                
+                if (year !== '*') {
+                    description += `在 ${describeCronPart(year)} 年，`;
+                }
+                
+                description = description.replace(/，$/g, '');
+                document.getElementById('cronDescription').textContent = description;
+                
+                // 计算未来执行时间 (简化实现)
+                const nextDates = [];
+                const now = new Date();
+                let nextDate = new Date(now);
+                
+                // 简单算法：每次加一分钟，检查是否匹配
+                for (let i = 0; i < 5; i++) {
+                    nextDate.setMinutes(nextDate.getMinutes() + 1);
+                    nextDates.push(formatDate(nextDate));
+                }
+                
+                const nextDatesList = document.getElementById('cronNextDates');
+                nextDatesList.innerHTML = '';
+                nextDates.forEach(date => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item';
+                    li.textContent = date;
+                    nextDatesList.appendChild(li);
+                });
+            } catch (e) {
+                alert('CRON解析失败: ' + e.message);
+            }
+        }
+        
+        // 辅助函数：描述CRON部分
+        function describeCronPart(part) {
+            if (part === '*') return '每';
+            if (part === '?') return '任意';
+            
+            if (part.includes('/')) {
+                const [start, step] = part.split('/');
+                if (start === '*') {
+                    return `每隔 ${step}`;
+                }
+                return `从 ${start} 开始，每隔 ${step}`;
+            }
+            
+            if (part.includes('-')) {
+                const [start, end] = part.split('-');
+                return `${start} 到 ${end}`;
+            }
+            
+            if (part.includes(',')) {
+                return part.split(',').join('、');
+            }
+            
+            return part;
+        }
+        
+        // 辅助函数：使用名称描述CRON部分
+        function describeCronPartWithNames(part, names) {
+            if (part === '*') return '每';
+            if (part === '?') return '任意';
+            
+            if (part.includes('/')) {
+                const [start, step] = part.split('/');
+                if (start === '*') {
+                    return `每隔 ${step}`;
+                }
+                return `从 ${getName(start, names)} 开始，每隔 ${step}`;
+            }
+            
+            if (part.includes('-')) {
+                const [start, end] = part.split('-');
+                return `${getName(start, names)} 到 ${getName(end, names)}`;
+            }
+            
+            if (part.includes(',')) {
+                return part.split(',').map(p => getName(p, names)).join('、');
+            }
+            
+            return getName(part, names);
+        }
+        
+        // 辅助函数：根据索引获取名称
+        function getName(index, names) {
+            const idx = parseInt(index) % names.length;
+            return names[idx];
+        }
+        
+        // 辅助函数：格式化日期
+        function formatDate(date) {
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
+        }
+        
+        // ===== 新增功能 =====
+        
+        // 代码高亮美化工具
+        function highlightCode() {
+            const codeInput = document.getElementById('codeInput');
+            const language = document.getElementById('codeLanguage').value;
+            
+            if (!codeInput.value.trim()) {
+                alert('请输入代码');
+                return;
+            }
+            
+            try {
+                // 这里应该引入实际的代码高亮库，这里只是简单的格式化展示
+                let code = codeInput.value;
+                
+                // 简单格式化
+                if (language === 'json') {
+                    try {
+                        const json = JSON.parse(code);
+                        code = JSON.stringify(json, null, 2);
+                    } catch (e) {
+                        // 忽略错误，保持原样
+                    }
+                } else if (language === 'html') {
+                    // 简单的HTML格式化
+                    code = code.replace(/></g, '>\n<');
+                    // 添加缩进
+                    let indentLevel = 0;
+                    const lines = code.split('\n');
+                    code = lines.map(line => {
+                        let indentChange = 0;
+                        if (line.match(/<\//)) indentChange--;
+                        const result = '  '.repeat(Math.max(0, indentLevel + indentChange)) + line;
+                        if (line.match(/<[^/][^>]*>/) && !line.match(/<\//) && !line.match(/\/>/)) indentChange++;
+                        indentLevel += indentChange;
+                        return result;
+                    }).join('\n');
+                }
+                
+                document.getElementById('highlightedCode').textContent = code;
+            } catch (e) {
+                alert('代码处理失败: ' + e.message);
+            }
+        }
+        
+        // 文本差异对比工具
+        function compareDiff() {
+            const original = document.getElementById('originalText').value;
+            const modified = document.getElementById('modifiedText').value;
+            
+            if (!original || !modified) {
+                alert('请同时输入原始文本和修改后文本');
+                return;
+            }
+            
+            try {
+                // 简单的差异实现
+                const diffResult = document.getElementById('diffResult');
+                diffResult.innerHTML = '';
+                
+                const originalLines = original.split('\n');
+                const modifiedLines = modified.split('\n');
+                
+                // 使用简化的最长公共子序列算法
+                const result = [];
+                let i = 0, j = 0;
+                
+                while (i < originalLines.length && j < modifiedLines.length) {
+                    if (originalLines[i] === modifiedLines[j]) {
+                        result.push(`<div class="diff-line diff-common">${escapeHtml(originalLines[i])}</div>`);
+                        i++;
+                        j++;
+                    } else if (i + 1 < originalLines.length && originalLines[i + 1] === modifiedLines[j]) {
+                        result.push(`<div class="diff-line diff-removed">${escapeHtml(originalLines[i])}</div>`);
+                        i++;
+                    } else {
+                        result.push(`<div class="diff-line diff-added">${escapeHtml(modifiedLines[j])}</div>`);
+                        j++;
+                    }
+                }
+                
+                // 处理剩余的行
+                while (i < originalLines.length) {
+                    result.push(`<div class="diff-line diff-removed">${escapeHtml(originalLines[i])}</div>`);
+                    i++;
+                }
+                
+                while (j < modifiedLines.length) {
+                    result.push(`<div class="diff-line diff-added">${escapeHtml(modifiedLines[j])}</div>`);
+                    j++;
+                }
+                
+                diffResult.innerHTML = result.join('');
+            } catch (e) {
+                alert('文本对比失败: ' + e.message);
+            }
+        }
+        
+        // 辅助函数：HTML转义
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+        
+        // 图片转Base64
+        function handleImageUpload() {
+            const fileInput = document.getElementById('imageFileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('请选择图片文件');
+                return;
+            }
+            
+            if (!file.type.match('image.*')) {
+                alert('请选择图片文件');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64 = e.target.result;
+                document.getElementById('imageBase64Output').value = base64;
+                document.getElementById('imagePreview').src = base64;
+                document.getElementById('imagePreviewContainer').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // IP地址工具
+        function validateIP() {
+            const ipInput = document.getElementById('ipInput').value;
+            const ipVersion = document.getElementById('ipVersion').value;
+            const ipInfoDiv = document.getElementById('ipInfo');
+            
+            if (!ipInput) {
+                alert('请输入IP地址');
+                return;
+            }
+            
+            try {
+                let isValid = false;
+                let info = '';
+                
+                if (ipVersion === 'ipv4') {
+                    // IPv4验证
+                    const ipv4Regex = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
+                    const match = ipInput.match(ipv4Regex);
+                    
+                    if (match) {
+                        const octets = [
+                            parseInt(match[1]),
+                            parseInt(match[2]),
+                            parseInt(match[3]),
+                            parseInt(match[4])
+                        ];
+                        
+                        isValid = octets.every(octet => octet >= 0 && octet <= 255);
+                        
+                        if (isValid) {
+                            // 确定IP类型
+                            let type = '';
+                            if (octets[0] >= 1 && octets[0] <= 126) {
+                                type = 'A类';
+                            } else if (octets[0] >= 128 && octets[0] <= 191) {
+                                type = 'B类';
+                            } else if (octets[0] >= 192 && octets[0] <= 223) {
+                                type = 'C类';
+                            } else if (octets[0] >= 224 && octets[0] <= 239) {
+                                type = 'D类 (多播)';
+                            } else if (octets[0] >= 240 && octets[0] <= 255) {
+                                type = 'E类 (实验)';
+                            } else if (octets[0] === 127) {
+                                type = '回环地址';
+                            }
+                            
+                            // 判断是否是私有IP
+                            let isPrivate = false;
+                            if (
+                                (octets[0] === 10) || 
+                                (octets[0] === 172 && octets[1] >= 16 && octets[1] <= 31) || 
+                                (octets[0] === 192 && octets[1] === 168)
+                            ) {
+                                isPrivate = true;
+                            }
+                            
+                            info = `
+                            <div class="alert alert-success">有效的IPv4地址</div>
+                            <ul class="list-group">
+                                <li class="list-group-item">地址类型: ${type}</li>
+                                <li class="list-group-item">私有地址: ${isPrivate ? '是' : '否'}</li>
+                                <li class="list-group-item">二进制表示: ${octets.map(o => o.toString(2).padStart(8, '0')).join('.')}</li>
+                            </ul>`;
+                        }
+                    }
+                } else {
+                    // IPv6验证 (简化版)
+                    const ipv6Regex = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]+|::(ffff(:0{1,4})?:)?((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9]))$/;
+                    isValid = ipv6Regex.test(ipInput);
+                    
+                    if (isValid) {
+                        info = `
+                        <div class="alert alert-success">有效的IPv6地址</div>
+                        <ul class="list-group">
+                            <li class="list-group-item">压缩形式: ${compressIPv6(ipInput)}</li>
+                            <li class="list-group-item">完整形式: ${expandIPv6(ipInput)}</li>
+                        </ul>`;
+                    }
+                }
+                
+                if (!isValid) {
+                    info = `<div class="alert alert-danger">无效的${ipVersion === 'ipv4' ? 'IPv4' : 'IPv6'}地址</div>`;
+                }
+                
+                ipInfoDiv.innerHTML = info;
+            } catch (e) {
+                alert('IP验证失败: ' + e.message);
+            }
+        }
+        
+        // 辅助函数：压缩IPv6地址
+        function compressIPv6(ip) {
+            // 这是一个简化的实现
+            return ip.replace(/\b(?:0+:){2,}/, '::');
+        }
+        
+        // 辅助函数：展开IPv6地址
+        function expandIPv6(ip) {
+            // 这是一个简化的实现
+            if (ip.includes('::')) {
+                const parts = ip.split('::');
+                const left = parts[0] ? parts[0].split(':') : [];
+                const right = parts[1] ? parts[1].split(':') : [];
+                const missing = 8 - left.length - right.length;
+                const zeros = Array(missing).fill('0000');
+                
+                ip = [...left, ...zeros, ...right].join(':');
+            }
+            
+            return ip.split(':').map(p => p.padStart(4, '0')).join(':');
+        }
+        
+        // 单位转换器
+        function convertUnit() {
+            const inputValue = parseFloat(document.getElementById('unitInputValue').value);
+            const fromUnit = document.getElementById('unitFromSelect').value;
+            const toUnit = document.getElementById('unitToSelect').value;
+            const category = document.getElementById('unitCategory').value;
+            
+            if (isNaN(inputValue)) {
+                alert('请输入有效的数字');
+                return;
+            }
+            
+            try {
+                let result = 0;
+                
+                // 长度转换
+                if (category === 'length') {
+                    // 转换为米作为中间单位
+                    let meters = 0;
+                    switch (fromUnit) {
+                        case 'mm': meters = inputValue / 1000; break;
+                        case 'cm': meters = inputValue / 100; break;
+                        case 'm': meters = inputValue; break;
+                        case 'km': meters = inputValue * 1000; break;
+                        case 'in': meters = inputValue * 0.0254; break;
+                        case 'ft': meters = inputValue * 0.3048; break;
+                        case 'yd': meters = inputValue * 0.9144; break;
+                        case 'mi': meters = inputValue * 1609.344; break;
+                    }
+                    
+                    // 从米转换为目标单位
+                    switch (toUnit) {
+                        case 'mm': result = meters * 1000; break;
+                        case 'cm': result = meters * 100; break;
+                        case 'm': result = meters; break;
+                        case 'km': result = meters / 1000; break;
+                        case 'in': result = meters / 0.0254; break;
+                        case 'ft': result = meters / 0.3048; break;
+                        case 'yd': result = meters / 0.9144; break;
+                        case 'mi': result = meters / 1609.344; break;
+                    }
+                }
+                // 重量转换
+                else if (category === 'weight') {
+                    // 转换为克作为中间单位
+                    let grams = 0;
+                    switch (fromUnit) {
+                        case 'mg': grams = inputValue / 1000; break;
+                        case 'g': grams = inputValue; break;
+                        case 'kg': grams = inputValue * 1000; break;
+                        case 't': grams = inputValue * 1000000; break;
+                        case 'oz': grams = inputValue * 28.3495; break;
+                        case 'lb': grams = inputValue * 453.592; break;
+                    }
+                    
+                    // 从克转换为目标单位
+                    switch (toUnit) {
+                        case 'mg': result = grams * 1000; break;
+                        case 'g': result = grams; break;
+                        case 'kg': result = grams / 1000; break;
+                        case 't': result = grams / 1000000; break;
+                        case 'oz': result = grams / 28.3495; break;
+                        case 'lb': result = grams / 453.592; break;
+                    }
+                }
+                // 温度转换
+                else if (category === 'temperature') {
+                    // 直接转换，不使用中间单位
+                    if (fromUnit === 'c' && toUnit === 'f') {
+                        result = (inputValue * 9/5) + 32;
+                    } else if (fromUnit === 'c' && toUnit === 'k') {
+                        result = inputValue + 273.15;
+                    } else if (fromUnit === 'f' && toUnit === 'c') {
+                        result = (inputValue - 32) * 5/9;
+                    } else if (fromUnit === 'f' && toUnit === 'k') {
+                        result = ((inputValue - 32) * 5/9) + 273.15;
+                    } else if (fromUnit === 'k' && toUnit === 'c') {
+                        result = inputValue - 273.15;
+                    } else if (fromUnit === 'k' && toUnit === 'f') {
+                        result = ((inputValue - 273.15) * 9/5) + 32;
+                    } else {
+                        result = inputValue; // 相同单位
+                    }
+                }
+                
+                document.getElementById('unitResult').value = result.toFixed(6);
+            } catch (e) {
+                alert('转换失败: ' + e.message);
+            }
+        }
+        
+        // 更新单位选择列表
+        function updateUnitSelects() {
+            const category = document.getElementById('unitCategory').value;
+            const fromSelect = document.getElementById('unitFromSelect');
+            const toSelect = document.getElementById('unitToSelect');
+            
+            // 清空当前选项
+            fromSelect.innerHTML = '';
+            toSelect.innerHTML = '';
+            
+            // 根据类别添加相应的选项
+            let options = [];
+            
+            if (category === 'length') {
+                options = [
+                    {value: 'mm', text: '毫米 (mm)'},
+                    {value: 'cm', text: '厘米 (cm)'},
+                    {value: 'm', text: '米 (m)'},
+                    {value: 'km', text: '千米 (km)'},
+                    {value: 'in', text: '英寸 (in)'},
+                    {value: 'ft', text: '英尺 (ft)'},
+                    {value: 'yd', text: '码 (yd)'},
+                    {value: 'mi', text: '英里 (mi)'}
+                ];
+            } else if (category === 'weight') {
+                options = [
+                    {value: 'mg', text: '毫克 (mg)'},
+                    {value: 'g', text: '克 (g)'},
+                    {value: 'kg', text: '千克 (kg)'},
+                    {value: 't', text: '吨 (t)'},
+                    {value: 'oz', text: '盎司 (oz)'},
+                    {value: 'lb', text: '磅 (lb)'}
+                ];
+            } else if (category === 'temperature') {
+                options = [
+                    {value: 'c', text: '摄氏度 (°C)'},
+                    {value: 'f', text: '华氏度 (°F)'},
+                    {value: 'k', text: '开尔文 (K)'}
+                ];
+            }
+            
+            // 添加选项到选择列表
+            options.forEach(opt => {
+                const fromOpt = document.createElement('option');
+                fromOpt.value = opt.value;
+                fromOpt.textContent = opt.text;
+                fromSelect.appendChild(fromOpt);
+                
+                const toOpt = document.createElement('option');
+                toOpt.value = opt.value;
+                toOpt.textContent = opt.text;
+                toSelect.appendChild(toOpt);
+            });
+            
+            // 设置默认值
+            if (options.length > 1) {
+                toSelect.value = options[1].value;
+            }
+        }
+        
+        // ===== 通用功能 =====
+        
+        // 复制到剪贴板
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            element.select();
+            document.execCommand('copy');
+            
+            // 显示复制成功的视觉反馈
+            const originalBg = element.style.backgroundColor;
+            element.classList.add('copy-success');
+            
+            setTimeout(function() {
+                element.classList.remove('copy-success');
+            }, 500);
+        }
+    </script>
+</body>
+</html>
